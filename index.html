@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pong</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Pong</h1>
+    <div class="popup">
+      <div onclick="stats()" style="cursor: pointer;">Click To Toggle Stats</div>
+      <div class="popuptext" id="myPopup">
+        <p>
+          <a onclick="HardStats()" style="cursor: pointer;">Hard</a>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          <a onclick="MediumStats()" style="cursor: pointer;">Medium</a>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
+          <a onclick="EasyStats()" style="cursor: pointer;">Easy</a>
+        </p>
+        <div id="hardMode" style="display: block;">
+          <h1 style="margin-bottom: 60px;">Hard Mode Stats</h1>
+          <h3 id="ovrHardRight">Goals For:</h3>
+          <h3 id="ovrHardLeft">Goals Against:</h3>
+        </div>
+        <div id="mediumMode" style="display: none;">
+          <h1 style="margin-bottom: 60px;">Medium Mode Stats</h1>
+          <h3 id="ovrMediumRight">Goals For:</h3>
+          <h3 id="ovrMediumLeft">Goals Against:</h3>
+        </div>
+        <div id="easyMode" style="display: none;">
+          <h1 style="margin-bottom: 60px;">Easy Mode Stats</h1>
+          <h3 id="ovrEasyRight">Goals For:</h3>
+          <h3 id="ovrEasyLeft">Goals Against:</h3>
+        </div>
+      </div>
+      
+    </div>
+    <div class="container">
+      <button onclick="startUserVsUserGame()">User vs User</button>
+      <button onclick="showDifficultyButtons()">User vs CPU</button>
+      <button onclick="startComputerVsComputerGame()">CPU vs CPU</button>
+
+      <div id="difficulty-buttons" style="display: none;">
+        <h2>Select Difficulty:</h2>
+        <button onclick="startEasyGame()">Easy</button>
+        <button onclick="startMediumGame()">Medium</button>
+        <button onclick="startHardGame()">Hard</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

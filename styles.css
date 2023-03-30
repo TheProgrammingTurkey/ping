@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  padding: auto;
+  margin: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+  
+h1 {
+  font-size: 48px;
+  margin-bottom: 32px;
+  font-family: 'Press Start 2P', cursive;
+}
+
+h2{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+}
+
+h3{
+  font-size: 24px;
+  text-align: left;
+  font-family: 'Press Start 2P', cursive;
+  margin-left: 30px;
+}
+
+button {
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  display: inline-block;
+  color: white;
+  margin: 20px;
+  width: 180px;
+  height: 50px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: Helvetica;
+  text-align: center;
+  transition: all 0.5s ease 0s;
+  border: none;
+  background-color:rgb(254, 198, 77);;
+} 
+ 
+button:hover{
+  transform: scale(1.1);
+  background-color: #ff930f;
+} 
+
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* The popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 80vw;
+  height: 60vh;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  top: 200%;
+  left: 50%;
+  margin-left: -40vw;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
