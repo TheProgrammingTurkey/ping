@@ -194,10 +194,7 @@ function calculate1(){
     let smallContact = 0
     let largeContact = canvas.height
     //finding at what Y value the ball will hit the wall
-    if (velocityY == 0){
-        return;
-    }
-    else if (velocityY > 0){
+    if (velocityY > 0){
         while (contactPoint1Y < canvas.height-10){
             contactPoint1Y += velocityY
         }
@@ -254,10 +251,7 @@ function calculate2(){
     let smallContact = 0
     let largeContact = canvas.height
     //finding at what Y value the ball will hit the wall
-    if (velocityY == 0){
-        return;
-    }
-    else if (velocityY > 0){
+    if (velocityY > 0){
         while (contactPoint1Y < canvas.height-10){
             contactPoint1Y += velocityY
         }
