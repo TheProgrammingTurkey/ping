@@ -75,7 +75,7 @@ function update() {
     if (ball.x >= paddle2.x-10 && ball.x <= paddle2.x+posVelocityX-5 && ball.y <= paddle2.y+110 && ball.y >= paddle2.y-10){
         //console.log(Math.round((ball.y+((ball.x-paddle2.x)*(velocityY/-(velocityX+paddleSpeedX))))*100)/100)
         velocityX = negVelocityX
-        velocityY = Math.round(ball.y-paddle2.y-50)/ballBounciness
+        velocityY = (ball.y-paddle2.y-50)/ballBounciness
         negVelocityY = -velocityY
         calculate1()
     }//checking if ball hit the sides of the right paddle
@@ -208,29 +208,25 @@ function calculate1(){
         while (contactPoint1Y < canvas.height-10){
             contactPoint1Y += velocityY
         }
-    }
-    else if (velocityY < 0){
-        while (contactPoint1Y > 10){
-            contactPoint1Y += velocityY
-        }
-    }
-    let contactPoint2Y = contactPoint1Y
-    //finding at what Y value the ball will hit the wall the second time    
-    if (contactPoint2Y < canvas.height/2 && velocityY < 0){
-        while (contactPoint2Y < canvas.height-10){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint2Y-contactPoint1Y
-        largeContact = contactPoint2Y
-        smallContact = contactPoint1Y
-    }
-    else if (contactPoint2Y > canvas.height/2 && velocityY > 0){
+        let contactPoint2Y = contactPoint1Y
         while (contactPoint2Y > 10){
             contactPoint2Y -= velocityY
         }
         adjustedHeight = contactPoint1Y-contactPoint2Y
         largeContact = contactPoint1Y
         smallContact = contactPoint2Y
+    }
+    else if (velocityY < 0){
+        while (contactPoint1Y > 10){
+            contactPoint1Y += velocityY
+        }
+        let contactPoint2Y = contactPoint1Y
+        while (contactPoint2Y < canvas.height-10){
+            contactPoint2Y -= velocityY
+        }
+        adjustedHeight = contactPoint2Y-contactPoint1Y
+        largeContact = contactPoint2Y
+        smallContact = contactPoint1Y
     }
 
     //calculating how many times the ball will bounce off the walls
@@ -278,30 +274,25 @@ function calculate2(){
         while (contactPoint1Y < canvas.height-10){
             contactPoint1Y += velocityY
         }
-    }
-    else if (velocityY < 0){
-        while (contactPoint1Y > 10){
-            contactPoint1Y += velocityY
-        }
-    }
-    let contactPoint2Y = contactPoint1Y
-
-    //finding at what Y value the ball will hit the wall the second time    
-    if (contactPoint2Y < canvas.height/2 && velocityY < 0){
-        while (contactPoint2Y < canvas.height-10){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint2Y-contactPoint1Y
-        largeContact = contactPoint2Y
-        smallContact = contactPoint1Y
-    }
-    else if (contactPoint2Y > canvas.height/2 && velocityY > 0){
+        let contactPoint2Y = contactPoint1Y
         while (contactPoint2Y > 10){
             contactPoint2Y -= velocityY
         }
         adjustedHeight = contactPoint1Y-contactPoint2Y
         largeContact = contactPoint1Y
         smallContact = contactPoint2Y
+    }
+    else if (velocityY < 0){
+        while (contactPoint1Y > 10){
+            contactPoint1Y += velocityY
+        }
+        let contactPoint2Y = contactPoint1Y
+        while (contactPoint2Y < canvas.height-10){
+            contactPoint2Y -= velocityY
+        }
+        adjustedHeight = contactPoint2Y-contactPoint1Y
+        largeContact = contactPoint2Y
+        smallContact = contactPoint1Y
     }
 
     //calculating how many times the ball will bounce off the walls
