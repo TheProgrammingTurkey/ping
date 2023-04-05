@@ -61,7 +61,7 @@ function update() {
     //checking if ball hit the front of the right paddle
     if (ball.x >= paddle2.x-10 && ball.x <= paddle2.x+posVelocityX-5 && ball.y <= paddle2.y+110 && ball.y >= paddle2.y-10){
         velocityX = negVelocityX
-        velocityY = (ball.y-paddle2.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle2.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
         calculate1()
     }//checking if ball hit the sides of the right paddle
@@ -71,7 +71,7 @@ function update() {
     //checking if ball hit the front of the left paddle
     if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX+25 && ball.y <= paddle1.y+110 && ball.y >= paddle1.y-10){
         velocityX = posVelocityX
-        velocityY = (ball.y-paddle1.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle1.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
         calculate2()
     }//checking if ball hit the sides of the left paddle

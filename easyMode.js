@@ -70,7 +70,7 @@ function update() {
     if (ball.x >= paddle2.x-10 && ball.x <= paddle2.x+posVelocityX-5 && ball.y <= paddle2.y+110 && ball.y >= paddle2.y-10){
         //console.log(Math.round((ball.y+((ball.x-paddle2.x)*(velocityY/-(velocityX+paddleSpeedX))))*100)/100)
         velocityX = negVelocityX
-        velocityY = (ball.y-paddle2.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle2.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
     }//checking if ball hit the sides of the right paddle
     else if (ball.x >= paddle2.x-10 && ball.x <= paddle2.x+posVelocityX+20 && ball.y <= paddle2.y+110 && ball.y >= paddle2.y-10){
@@ -80,7 +80,7 @@ function update() {
     if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX+25 && ball.y <= paddle1.y+110 && ball.y >= paddle1.y-10){
         //console.log(Math.round((ball.y+((paddle1.x+30-ball.x)*(velocityY/(velocityX-paddleSpeedX))))*100)/100)
         velocityX = posVelocityX
-        velocityY = (ball.y-paddle1.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle1.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
     }//checking if ball hit the sides of the left paddle
     else if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX && ball.y <= paddle1.y+110 && ball.y >= paddle1.y-10){

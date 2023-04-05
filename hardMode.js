@@ -25,11 +25,11 @@ let posVelocityX = velocityX
 let negVelocityX = velocityX/-1
 
 //setting multiple speeds
-let velocityY = 0
+let velocityY = 10
 let negVelocityY = 0
 let paddleSpeedY = 5
 let paddleSpeedX = 0.4
-let playing = false
+let playing = true
 let ballBounciness = 5
 
 //sets canvas fullscreen
@@ -75,7 +75,7 @@ function update() {
     if (ball.x >= paddle2.x-10 && ball.x <= paddle2.x+posVelocityX-5 && ball.y <= paddle2.y+110 && ball.y >= paddle2.y-10){
         //console.log(Math.round((ball.y+((ball.x-paddle2.x)*(velocityY/-(velocityX+paddleSpeedX))))*100)/100)
         velocityX = negVelocityX
-        velocityY = (ball.y-paddle2.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle2.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
         calculate1()
     }//checking if ball hit the sides of the right paddle
@@ -86,7 +86,7 @@ function update() {
     if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX+25 && ball.y <= paddle1.y+110 && ball.y >= paddle1.y-10){
         //console.log(Math.round((ball.y+((paddle1.x+30-ball.x)*(velocityY/(velocityX-paddleSpeedX))))*100)/100)
         velocityX = posVelocityX
-        velocityY = (ball.y-paddle1.y-50)/ballBounciness
+        velocityY = Math.round(((ball.y-paddle1.y-50)/ballBounciness)*10)/10
         negVelocityY = -velocityY
         calculate2()
     }//checking if ball hit the sides of the left paddle
@@ -268,6 +268,7 @@ function calculate2(){
     let adjustedHeight = 0
     let smallContact = 0
     let largeContact = canvas.height
+
 
     //finding at what Y value the ball will hit the wall
     if (velocityY > 0){
