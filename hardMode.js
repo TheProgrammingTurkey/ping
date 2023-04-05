@@ -29,7 +29,7 @@ let velocityY = 10
 let negVelocityY = 0
 let paddleSpeedY = 5
 let paddleSpeedX = 0.4
-let playing = true
+let playing = false
 let ballBounciness = 5
 
 //sets canvas fullscreen
