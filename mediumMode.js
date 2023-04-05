@@ -113,6 +113,9 @@ function update() {
         }
         playing = true
     }
+    if (toggledKeys["Escape"] && playing == false){
+        window.location.replace("index.html")
+    }
     //go towards ball
     if (velocityX > 0 && paddle1.y+50 > predictedSpotY2 && paddle1.y > 0){
         paddle1.y -= paddleSpeedY;
@@ -305,6 +308,7 @@ function draw() {
     ctx.fillStyle='grey'
     if(playing == false){
         ctx.fillText("Press Space To Start", canvas.width/2, canvas.height/2);
+        ctx.fillText("Press Escape To Go Back To Home Page", canvas.width/2, canvas.height/2+60);
     }
     requestAnimationFrame(draw);
 }

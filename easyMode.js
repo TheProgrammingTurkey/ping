@@ -103,6 +103,9 @@ function update() {
         }
         playing = true
     }
+    if (toggledKeys["Escape"] && playing == false){
+        window.location.replace("index.html")
+    }
     //bot move towards ball
     if (ball.y > paddle1.y+50 && paddle1.y < canvas.height-paddleHeight) {
         paddle1.y += paddleSpeedY;
@@ -184,6 +187,7 @@ function draw() {
     ctx.fillStyle='grey'
     if(playing == false){
         ctx.fillText("Press Space To Start", canvas.width/2, canvas.height/2);
+        ctx.fillText("Press Escape To Go Back To Home Page", canvas.width/2, canvas.height/2+60);
     }
     requestAnimationFrame(draw);
 }

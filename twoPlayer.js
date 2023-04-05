@@ -91,6 +91,9 @@ function update() {
     if (toggledKeys["Space"] && playing == false){
         playing = true
     }
+    if (toggledKeys["Escape"] && playing == false){
+        window.location.replace("index.html")
+    }
     //ball goes past right paddle
     if (ball.x > canvas.width-10+posVelocityX) {
         scoreLeft+=1
@@ -160,6 +163,7 @@ function draw() {
     ctx.fillStyle='grey'
     if(playing == false){
         ctx.fillText("Press Space To Start", canvas.width/2, canvas.height/2);
+        ctx.fillText("Press Escape To Go Back To Home Page", canvas.width/2, canvas.height/2+60);
     }
     requestAnimationFrame(draw);
 }
