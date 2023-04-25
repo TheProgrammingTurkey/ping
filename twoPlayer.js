@@ -16,7 +16,7 @@ let playing = false
 let ballBounciness = 5
 
 //sets canvas fullscreen
-canvas.height = Math.floor(window.innerHeight/5)*5;
+canvas.height = Math.floor(window.innerHeight/paddleSpeedY)*paddle1SpeedY;
 canvas.width = Math.floor(window.innerWidth);
 
 //makes canvas 2d
