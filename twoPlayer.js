@@ -158,9 +158,6 @@ function update() {
     }
 
     if (toggledKeys["Space"] && playing == false){
-        if (ball.x < canvas.width/2){
-            velocityY = Math.round(Math.random() * (5+5) -5)
-        }
         playing = true;
         powerUpShow = true;
         whichPowerUp = powerUps[Math.floor(Math.random()*4.99)]
