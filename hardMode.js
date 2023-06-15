@@ -4,7 +4,6 @@ let movingSpeed = 60;
 let secondsPassed = 0;
 let oldTimeStamp = 0;
 
-
 const powerUps = ["plusBallSpeed", "plusPaddleSize", "minusPaddleSize", "plusPaddleSpeed", "plusBallSize"]
 let whichPowerUp = 0
 
@@ -46,7 +45,8 @@ let paddle1SpeedY = paddleSpeedY
 let paddle2SpeedY = paddleSpeedY
 let paddleSpeedX = 0.4
 let playing = false
-let ballBounciness = 5
+let setBallBounciness = 5
+let ballBounciness = setBallBounciness
 
 //setting powerUp speeds
 let powerUpVelX = Math.round((Math.random() * 4 - 2)*100)/100
@@ -57,8 +57,8 @@ let powerUpHeight = 120
 let powerUpShow = true
 
 //sets canvas fullscreen
-canvas.height = Math.floor(window.innerHeight/paddleSpeedY)*paddleSpeedY;
-canvas.width = Math.floor(window.innerWidth/posVelocityX)*posVelocityX;
+canvas.height = Math.floor(window.innerHeight)
+canvas.width = Math.floor(window.innerWidth)
 
 //setting dimensions
 let paddleHeight = 100
@@ -68,7 +68,6 @@ let paddleWidth = 20
 let predictedSpotY1 = canvas.height/2
 let predictedSpotY2 = canvas.height/2
 let ballSize = 10
-
 
 
 //creates key object (kind of array)
@@ -108,7 +107,7 @@ function update() {
     //checking if ball hit the front of the right paddle
     if (ball.x >= paddle2.x-ballSize && ball.x <= paddle2.x+posVelocityX-5 && ball.y <= paddle2.y+paddle2Height+ballSize && ball.y >= paddle2.y-ballSize){
         velocityX = negVelocityX
-        velocityY = Math.round(((ball.y-paddle2.y-(paddle2Height/2))/ballBounciness*(100/paddle2Height))*ballSize)/ballSize
+        velocityY = Math.round(((ball.y-paddle2.y-(paddle2Height/2))/ballBounciness*(100/paddle2Height))*10)/10
         negVelocityY = -velocityY
     }//checking if ball hit the sides of the right paddle
     else if (ball.x >= paddle2.x-ballSize && ball.x <= paddle2.x+posVelocityX+20 && ball.y <= paddle2.y+paddle2Height+ballSize && ball.y >= paddle2.y-ballSize){
@@ -117,9 +116,8 @@ function update() {
     //checking if ball hit the front of the left paddle
     if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX+25 && ball.y <= paddle1.y+paddle1Height+ballSize && ball.y >= paddle1.y-ballSize){
         velocityX = posVelocityX
-        velocityY = Math.round(((ball.y-paddle1.y-(paddle1Height/2))/ballBounciness*(100/paddle1Height))*ballSize)/ballSize
+        velocityY = Math.round(((ball.y-paddle1.y-(paddle1Height/2))/ballBounciness*(100/paddle1Height))*10)/10
         negVelocityY = -velocityY
-        console.log(ball.y)
     }//checking if ball hit the sides of the left paddle
     else if (ball.x <= paddle1.x+30 && ball.x >= paddle1.x-posVelocityX && ball.y <= paddle1.y+paddle1Height+ballSize && ball.y >= paddle1.y-ballSize){
         velocityY = negVelocityY
@@ -131,16 +129,28 @@ function update() {
         calculate1()
     }
     //top and bottom of page collisions
-    if (ball.y <= ballSize || ball.y >= canvas.height-ballSize){
+    if (ball.y+velocityY < ballSize){
+        ball.y = Math.abs(velocityY)-(ball.y-ballSize)+ballSize
+        velocityY = velocityY/-1
+    }
+    if (ball.y+velocityY > canvas.height-ballSize){
+        ball.y = canvas.height-(Math.abs(velocityY)-((canvas.height-ball.y)-ballSize)+ballSize)
         velocityY = velocityY/-1
     }
     //checking what keys are pressed and moving paddles
-    if (toggledKeys["ArrowUp"] && paddle2.y > 0) {
+    if (toggledKeys["ArrowUp"] && paddle2.y > paddle2SpeedY) {
         paddle2.y -= paddle2SpeedY*movingSpeed*secondsPassed;
     }
-    if (toggledKeys["ArrowDown"] && paddle2.y < canvas.height-paddle2Height) {
+    else if (toggledKeys["ArrowUp"] && paddle2.y > 0) {
+        paddle2.y = 0
+    }
+    if (toggledKeys["ArrowDown"] && paddle2.y < canvas.height-paddle2Height-paddle2SpeedY) {
         paddle2.y += paddle2SpeedY*movingSpeed*secondsPassed;
     }
+    else if (toggledKeys["ArrowDown"] && paddle2.y < canvas.height-paddle2Height) {
+        paddle2.y = canvas.height-paddle2Height
+    }
+
     if (toggledKeys["Space"] && playing == false){
         if (ball.x < canvas.width/2){
             velocityY = Math.round(Math.random() * (5+5) -5)
@@ -152,31 +162,43 @@ function update() {
     if (toggledKeys["Escape"] && playing == false){
         window.location.replace("index.html")
     }
-    //if ball is moving away go towards middle
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 > (predictedSpotY2+canvas.height/2)/2 && paddle2.x-paddle1.x > canvas.width/3){
-        paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
+    //if ball is going away from cpu
+    if (velocityX > 0){
+        //if cpu is too close to top/bottom walls, go to middle
+        if (paddle1.y > canvas.height-paddle1Height-80){
+            paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        if (paddle1.y < 80){
+            paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
+        }//if cpu is near middle, go towards ball/middle
+        if (paddle1.x < canvas.width/2 - 160 && paddle1.y > 80 && paddle1.y < canvas.height-paddle1Height-80 && paddle1.y+paddle1Height/2 > (predictedSpotY2+canvas.height/2)/2){
+            paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        if (paddle1.x < canvas.width/2 - 160 && paddle1.y > 80 && paddle1.y < canvas.height-paddle1Height-80 && paddle1.y+paddle1Height/2 < (predictedSpotY2+canvas.height/2)/2){
+            paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        if (paddle1.x > canvas.width/2 - 160 && paddle1.y > 80 && paddle1.y < canvas.height-paddle1Height-80 && paddle1.y+paddle1Height/2 > predictedSpotY2){
+            paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        if (paddle1.x > canvas.width/2 - 160 && paddle1.y > 80 && paddle1.y < canvas.height-paddle1Height-80 && paddle1.y+paddle1Height/2 < predictedSpotY2){
+            paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+    }//if ball is going towards cpu
+    if (velocityX < 0){
+        //go towards predicted spot
+        if (predictedSpotY1 > paddle1.y+paddle1Height/2 && paddle1.y < canvas.height-paddle1Height-paddle1SpeedY) {
+            paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        else if (predictedSpotY1 > paddle1.y+paddle1Height/2) {
+            paddle1.y = canvas.height-paddle1Height
+        }
+        if (predictedSpotY1 < paddle1.y+paddle1Height/2 && paddle1.y > 0) {
+            paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
+        }
+        else if (predictedSpotY1 < paddle1.y+paddle1Height/2) {
+            paddle1.y = 0
+        }
     }
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 < (predictedSpotY2+canvas.height/2)/2 && paddle2.x-paddle1.x > canvas.width/3){
-        paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
-    }
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 > canvas.height-(paddle1Height+70) && paddle2.x-paddle1.x < canvas.width/3){
-        paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
-    }
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 < 70 && paddle2.x-paddle1.x < canvas.width/3){
-        paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
-    }
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 > predictedSpotY2 && paddle1.y > 70 && paddle2.x-paddle1.x < canvas.width/3){
-        paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
-    }
-    if (velocityX > 0 && paddle1.y+paddle1Height/2 < predictedSpotY2 && paddle1.y < canvas.height-(paddle1Height+70) && paddle2.x-paddle1.x < canvas.width/3){
-        paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
-    }//if ball is moving towards it go to predicted spot
-    if (predictedSpotY1 > paddle1.y+paddle1Height/2 && paddle1.y < canvas.height-paddle1Height && velocityX < 0) {
-        paddle1.y += paddle1SpeedY*movingSpeed*secondsPassed;
-    }
-    if (predictedSpotY1 < paddle1.y+paddle1Height/2 && paddle1.y > 0 && velocityX < 0) {
-        paddle1.y -= paddle1SpeedY*movingSpeed*secondsPassed;
-    } 
     //if ball goes past right paddle
     if (ball.x > canvas.width-ballSize+posVelocityX) {
         scoreLeft+=1
@@ -184,7 +206,7 @@ function update() {
         localStorage.setItem("ovrHardLeft", ovrHardLeft);
         paddle1Height = paddleHeight
         paddle2Height = paddleHeight
-        ballBounciness = 5
+        ballBounciness = setBallBounciness
         paddle1SpeedY = paddleSpeedY
         paddle2SpeedY = paddleSpeedY
         posVelocityX = 10
@@ -214,7 +236,7 @@ function update() {
         localStorage.setItem("ovrHardRight", ovrHardRight);
         paddle1Height = paddleHeight
         paddle2Height = paddleHeight
-        ballBounciness = 5
+        ballBounciness = setBallBounciness
         paddle1SpeedY = paddleSpeedY
         paddle2SpeedY = paddleSpeedY
         posVelocityX = 10
@@ -243,21 +265,21 @@ function update() {
         ball.x += velocityX*movingSpeed*secondsPassed
         ball.y += velocityY*movingSpeed*secondsPassed
         //paddles get closer
-        // if (paddle1.x < canvas.width/2 - 80){
-        //     paddle1.x += paddleSpeedX*movingSpeed*secondsPassed
-        //     paddle2.x -= paddleSpeedX*movingSpeed*secondsPassed
-        // }
+        if (paddle1.x < canvas.width/2 - 80){
+            paddle1.x += paddleSpeedX*movingSpeed*secondsPassed
+            paddle2.x -= paddleSpeedX*movingSpeed*secondsPassed
+        }
     }
-    //powerUps
+    //If powerUp is too close to walls, go towards middle
     if (powerUpPos.y <= 20+velocityY || powerUpPos.y+powerUpHeight >= canvas.height-20){
         powerUpVelY = powerUpVelY/-1
-    }
+    }//If powerUp is too close to paddles, go towards middle
     if (powerUpPos.x+powerUpWidth >= paddle2.x){
         powerUpVelX = -2
     }
     else if(powerUpPos.x <= paddle1.x+20){
         powerUpVelX = 2
-    }
+    }//Changing speed and direction of powerUp every 50 ticks
     else if(powerUpTime >= 50 && powerUpShow == true && powerUpPos.x+powerUpWidth <= paddle2.x && powerUpPos.x >= paddle1.x+20){
         powerUpTime = 0
         powerUpVelX = Math.round((Math.random() * 4 - 2)*100)/100
@@ -267,7 +289,7 @@ function update() {
         powerUpPos.x += powerUpVelX*movingSpeed*secondsPassed
         powerUpPos.y += powerUpVelY*movingSpeed*secondsPassed
     }
-
+    //Changing in game variables when ball hits powerUp
     if(ball.x-ballSize >= powerUpPos.x && ball.x+ballSize <= powerUpPos.x+powerUpWidth && ball.y-ballSize >= powerUpPos.y && ball.y+ballSize <= powerUpPos.y+powerUpHeight && powerUpShow == true){
         if(whichPowerUp == "plusPaddleSize"){
             if (velocityX > 0){
@@ -317,11 +339,11 @@ function update() {
         }
         powerUpShow = false
     }
-
+    //powerUp goes away after 600 ticks of usage
     if(powerUpTime >= 600 && powerUpShow == false){
         paddle1Height = paddleHeight
         paddle2Height = paddleHeight
-        ballBounciness = 5
+        ballBounciness = setBallBounciness
         paddle1SpeedY = paddleSpeedY
         paddle2SpeedY = paddleSpeedY
         ballSize = 10
@@ -338,138 +360,84 @@ function update() {
 
 //calculates where the ball will end up when it gets to the paddle
 function calculate1(){
-    let distanceToPaddle = (ball.x - (paddle1.x+30))
-    // let slope = -(velocityY/(velocityX-(paddleSpeedX)))
-    let slope = -(velocityY/velocityX)
+    let distanceToPaddle = (ball.x - (paddle1.x+20+ballSize))
+    let slope = -(velocityY/(velocityX-paddleSpeedX))
+    //let slope = -(velocityY/velocityX)
     predictedSpotY1 = (slope*distanceToPaddle)+ball.y
-    let contactPoint1Y = ball.y
-    let contactPoint2Y = ball.y
     let bounces = 0
-    let adjustedHeight = 0
-    let smallContact = 0
-    let largeContact = canvas.height
+    let adjustedHeight = canvas.height-ballSize*2
     
-    //finding at what Y value the ball will hit the wall
-    if (velocityY > 0){
-        while (contactPoint1Y < canvas.height-ballSize){
-            contactPoint1Y += velocityY
-        }
-        contactPoint2Y = contactPoint1Y
-        while (contactPoint2Y > ballSize){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint1Y-contactPoint2Y
-        largeContact = contactPoint1Y
-        smallContact = contactPoint2Y
-    }
-    else if (velocityY < 0){
-        while (contactPoint1Y > ballSize){
-            contactPoint1Y += velocityY
-        }
-        let contactPoint2Y = contactPoint1Y
-        while (contactPoint2Y < canvas.height-ballSize){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint2Y-contactPoint1Y
-        largeContact = contactPoint2Y
-        smallContact = contactPoint1Y
-    }
-
     //calculating how many times the ball will bounce off the walls
-    if(predictedSpotY1 < smallContact){
-        bounces = Math.ceil(Math.abs(predictedSpotY1/adjustedHeight))
-    }
-    else if(predictedSpotY1 > largeContact){
-        bounces = Math.floor(predictedSpotY1/adjustedHeight)
+    while(predictedSpotY1 > canvas.height-ballSize || predictedSpotY1 < ballSize){
+        if(predictedSpotY1 < ballSize){
+            bounces+=1
+            predictedSpotY1 = -predictedSpotY1+ballSize*2+Math.abs(velocityY)
+        }
+        else if(predictedSpotY1 > canvas.height-ballSize){
+            bounces +=1
+            predictedSpotY1 = canvas.height-(predictedSpotY1-canvas.height)-ballSize*2-Math.abs(velocityY)
+        }
     }
 
     //calculating where the ball will be when in hits the left paddle
-    if (predictedSpotY1 > largeContact && bounces == 1){
-        predictedSpotY1 = contactPoint1Y*2-predictedSpotY1
+    if (predictedSpotY1 > canvas.height-ballSize && bounces == 1){
+        predictedSpotY1 = (canvas.height-ballSize)*2-predictedSpotY1-velocityY
     }
-    else if (predictedSpotY1 < smallContact && bounces == 1){
-        predictedSpotY1 = Math.abs(predictedSpotY1)+(canvas.height+contactPoint1Y)-(canvas.height-contactPoint1Y)
+    else if (predictedSpotY1 < ballSize && bounces == 1){
+        predictedSpotY1 = Math.abs(predictedSpotY1)+(canvas.height+ballSize)-(canvas.height-ballSize)-velocityY
     }
-    else if (predictedSpotY1 < smallContact && (bounces % 2) == 0){
-        predictedSpotY1 = (adjustedHeight*bounces)-Math.abs(predictedSpotY1)
+    else if (predictedSpotY1 < ballSize && (bounces % 2) == 0){
+        predictedSpotY1 = (adjustedHeight*bounces)-Math.abs(predictedSpotY1)+velocityY*bounces
     }
-    else if (predictedSpotY1 > largeContact && (bounces % 2) == 0){
-        predictedSpotY1 = predictedSpotY1-(adjustedHeight*bounces)
+    else if (predictedSpotY1 > canvas.height-ballSize && (bounces % 2) == 0){
+        predictedSpotY1 = predictedSpotY1-(adjustedHeight*bounces)+velocityY*bounces
     }
-    else if(predictedSpotY1 > largeContact && (bounces % 2) != 0){
-        predictedSpotY1 = adjustedHeight-(predictedSpotY1-(adjustedHeight*bounces))+contactPoint2Y*2      
+    else if(predictedSpotY1 > canvas.height-ballSize && (bounces % 2) != 0){
+        predictedSpotY1 = adjustedHeight-(predictedSpotY1-(adjustedHeight*bounces))+ballSize*2-velocityY*bounces
     }
-    else if(predictedSpotY1 < smallContact && (bounces % 2) != 0){
-        predictedSpotY1 = adjustedHeight+(Math.abs(predictedSpotY1)-adjustedHeight*bounces)+contactPoint1Y*2
+    else if(predictedSpotY1 < ballSize && (bounces % 2) != 0){
+        predictedSpotY1 = adjustedHeight+(Math.abs(predictedSpotY1)-adjustedHeight*bounces)+ballSize*2-velocityY*bounces
     }
-    console.log(Math.round(predictedSpotY1*1000)/1000, bounces)
 }
 //calculates where the ball will end up when it gets to the paddle
 function calculate2(){
     let distanceToPaddle = (paddle2.x-ball.x)
-    // let slope = (velocityY/(velocityX+paddleSpeedX))
-    let slope = (velocityY/velocityX)
+    let slope = (velocityY/(velocityX+paddleSpeedX))
+    //let slope = (velocityY/velocityX)
     predictedSpotY2 = (slope*distanceToPaddle)+ball.y
-    let contactPoint1Y = ball.y
-    let contactPoint2Y = ball.y
     let bounces = 0
-    let adjustedHeight = 0
-    let smallContact = 0
-    let largeContact = canvas.height
-
-
-    //finding at what Y value the ball will hit the wall
-    if (velocityY > 0){
-        while (contactPoint1Y < canvas.height-ballSize){
-            contactPoint1Y += velocityY
-        }
-        contactPoint2Y = contactPoint1Y
-        while (contactPoint2Y > ballSize){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint1Y-contactPoint2Y
-        largeContact = contactPoint1Y
-        smallContact = contactPoint2Y
-    }
-    else if (velocityY < 0){
-        while (contactPoint1Y > ballSize){
-            contactPoint1Y += velocityY
-        }
-        let contactPoint2Y = contactPoint1Y
-        while (contactPoint2Y < canvas.height-ballSize){
-            contactPoint2Y -= velocityY
-        }
-        adjustedHeight = contactPoint2Y-contactPoint1Y
-        largeContact = contactPoint2Y
-        smallContact = contactPoint1Y
-    }
+    let adjustedHeight = canvas.height-ballSize*2
 
     //calculating how many times the ball will bounce off the walls
-    if(predictedSpotY2 < smallContact){
-        bounces = Math.ceil(Math.abs(predictedSpotY2/adjustedHeight))
-    }
-    else if(predictedSpotY2 > largeContact){
-        bounces = Math.floor(predictedSpotY2/adjustedHeight)
+    while(predictedSpotY2 > canvas.height-ballSize || predictedSpotY2 < ballSize){
+        if(predictedSpotY2 < ballSize){
+            bounces+=1
+            predictedSpotY2 = -predictedSpotY2+ballSize*2+Math.abs(velocityY)
+        }
+        else if(predictedSpotY2 > canvas.height-ballSize){
+            bounces +=1
+            predictedSpotY2 = canvas.height-(predictedSpotY2-canvas.height)-ballSize*2-Math.abs(velocityY)
+        }
     }
 
     //calculating where the ball will be when in hits the right paddle
-    if (predictedSpotY2 > largeContact && bounces == 1){
-        predictedSpotY2 = contactPoint1Y*2-predictedSpotY2
+    if (predictedSpotY2 > canvas.height-ballSize && bounces == 1){
+        predictedSpotY2 = (canvas.height-ballSize)*2-predictedSpotY2-velocityY
     }
-    else if (predictedSpotY2 < smallContact && bounces == 1){
-        predictedSpotY2 = Math.abs(predictedSpotY2)+(canvas.height+contactPoint1Y)-(canvas.height-contactPoint1Y)
+    else if (predictedSpotY2 < ballSize && bounces == 1){
+        predictedSpotY2 = Math.abs(predictedSpotY2)+(canvas.height+ballSize)-(canvas.height-ballSize)-velocityY
     }
-    else if (predictedSpotY2 < smallContact && (bounces % 2) == 0){
-        predictedSpotY2 = (adjustedHeight*bounces)-Math.abs(predictedSpotY2)
+    else if (predictedSpotY2 < ballSize && (bounces % 2) == 0){
+        predictedSpotY2 = (adjustedHeight*bounces)-Math.abs(predictedSpotY2)+velocityY*bounces
     }
-    else if (predictedSpotY2 > largeContact && (bounces % 2) == 0){
-        predictedSpotY2 = predictedSpotY2-(adjustedHeight*bounces)
+    else if (predictedSpotY2 > canvas.height-ballSize && (bounces % 2) == 0){
+        predictedSpotY2 = predictedSpotY2-(adjustedHeight*bounces)+velocityY*bounces
     }
-    else if(predictedSpotY2 > largeContact && (bounces % 2) != 0 && ball.x < canvas.width-60){
-        predictedSpotY2 = adjustedHeight-(predictedSpotY2-(adjustedHeight*bounces))+contactPoint2Y*2      
+    else if(predictedSpotY2 > canvas.height-ballSize && (bounces % 2) != 0 && ball.x < canvas.width-60){
+        predictedSpotY2 = adjustedHeight-(predictedSpotY2-(adjustedHeight*bounces))+ballSize*2-velocityY*bounces
     }
-    else if(predictedSpotY2 < smallContact && (bounces % 2) != 0){
-        predictedSpotY2 = adjustedHeight+(Math.abs(predictedSpotY2)-adjustedHeight*bounces)+contactPoint1Y*2
+    else if(predictedSpotY2 < ballSize && (bounces % 2) != 0){
+        predictedSpotY2 = adjustedHeight+(Math.abs(predictedSpotY2)-adjustedHeight*bounces)+ballSize*2-velocityY*bounces
     }
 }
 
