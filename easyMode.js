@@ -280,13 +280,13 @@ function update() {
     if(ball.x-ballSize >= powerUpPos.x && ball.x+ballSize <= powerUpPos.x+powerUpWidth && ball.y-ballSize >= powerUpPos.y && ball.y+ballSize <= powerUpPos.y+powerUpHeight && powerUpShow == true){
         if(whichPowerUp == "plusPaddleSize"){
             if (velocityX > 0){
-                if(paddle1.y > canvas.height-100){
+                if(paddle1.y > canvas.height-200){
                     paddle1.y = canvas.height-200
                 }
                 paddle1Height = 200
             }
             else if (velocityX < 0){
-                if(paddle2.y > canvas.height-100){
+                if(paddle2.y > canvas.height-200){
                     paddle2.y = canvas.height-200
                 }
                 paddle2Height = 200
