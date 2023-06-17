@@ -17,17 +17,17 @@ let minusPaddleSize = document.getElementById("minusPaddleSize");
 //setting starting scoreline
 let scoreLeft = 0
 let scoreRight = 0
-if (localStorage.getItem("ovrHardLeft") == null){
-    ovrHardLeft = 0
+if (localStorage.getItem("ovrMediumLeft") == null){
+    ovrMediumLeft = 0
 }
 else{
-    ovrHardLeft = parseInt(localStorage.getItem("ovrHardLeft"))
+    ovrMediumLeft = parseInt(localStorage.getItem("ovrMediumLeft"))
 }
-if (localStorage.getItem("ovrHardRight") == null){
-    ovrHardRight = 0
+if (localStorage.getItem("ovrMediumRight") == null){
+    ovrMediumRight = 0
 }
 else{
-    ovrHardRight = parseInt(localStorage.getItem("ovrHardRight"))
+    ovrMediumRight = parseInt(localStorage.getItem("ovrMediumRight"))
 }
 
 
@@ -195,8 +195,8 @@ function update() {
     //if ball goes past right paddle
     if (ball.x > canvas.width-ballSize+posVelocityX) {
         scoreLeft+=1
-        ovrHardLeft+=1
-        localStorage.setItem("ovrHardLeft", ovrHardLeft);
+        ovrMediumLeft+=1
+        localStorage.setItem("ovrMediumLeft", ovrMediumLeft);
         paddle1Height = paddleHeight
         paddle2Height = paddleHeight
         ballBounciness = setBallBounciness
@@ -225,8 +225,8 @@ function update() {
     //if ball goes past left paddle
     if (ball.x < ballSize-posVelocityX){
         scoreRight+=1
-        ovrHardRight+=1
-        localStorage.setItem("ovrHardRight", ovrHardRight);
+        ovrMediumRight+=1
+        localStorage.setItem("ovrMediumRight", ovrMediumRight);
         paddle1Height = paddleHeight
         paddle2Height = paddleHeight
         ballBounciness = setBallBounciness
